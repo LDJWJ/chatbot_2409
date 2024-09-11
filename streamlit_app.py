@@ -61,13 +61,12 @@ else:
         이 정보를 고려하여 맞춤형 조언을 제공해주세요. 항상 긍정적이고 건설적인 조언을 해주세요."""
 
         # OpenAI API를 사용하여 응답 생성
+        messages = [{"role": "system", "content": system_message}]
+        messages.extend([{"role": m["role"], "content": m["content"]} for m in st.session_state.messages])
+
         stream = client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages=[
-                {"role": "system", "content": system_message},
-                {"role": m["role"], "content": m["content"]}
-                for m in st.session_state.messages
-            ],
+            messages=messages,
             stream=True,
         )
 
